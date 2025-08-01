@@ -39,7 +39,7 @@
 - Week 13 is I/O
 - And week 19 is Pandas vs Numpy
 
-## Update 23rd Juune 2025
+## Update 23rd June 2025
 
 Taking all this into consideration, the sequence could look like (I am rewriting the above with some details and the rest of the weeks as well)
 
