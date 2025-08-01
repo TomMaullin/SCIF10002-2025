@@ -55,7 +55,7 @@ Taking all this into consideration, the sequence could look like (I am rewriting
 
 5. Consolidation material with examples from data science, chemistry and physics (one simple example each)
 
-   --- Revision ---
+6.    --- Revision ---
 
 6. Introduction to numpy: operations with one-dimensional arrays
 
@@ -77,7 +77,8 @@ Taking all this into consideration, the sequence could look like (I am rewriting
 14. Pandas vs numpy (inter-communication between the two modules, differences in slicing and glimpse on functions used as first-class objects by pandas'apply )
 
 15. Writing scientific reports (preparation for final assignment. The message gets reiterated in the tutorials in small groups)
-    --- Revision
+    
+16.    --- Revision
 
 16. Curve fitting (polynomial fits with numpy)
 
