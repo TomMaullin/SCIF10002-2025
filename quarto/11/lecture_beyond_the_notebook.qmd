@@ -1,0 +1,276 @@
+---
+title: Beyond the notebook
+jupyter: python3
+---
+
+
+
+## Our file system
+
+Our notebooks in `jupyter` do not exist in the void. They are stored in a directory on an online account on the *Noteable* server. These directories have a **structure**, the *file system*, and we can navigate this structure using dedicated commands.
+
+These are not python commands, but are in fact specific to the file system itself, and follow different logic and conventions. For this reason, we prepend them with the `!` character. At the moment, we will use one command per cell.
+
+## Pathway to the current directory
+
+First, let's check where we are right now in the file system. To do so, we query the **p**athway to the **w**orking ***d***irectory with the `pwd` command.
+
+```{python}
+! pwd
+```
+
+This shows where we currently are, and each of you should have a different path, with a different username.
+
+## Listing the content of the current directory
+
+The `ls` command lists the files and directories in the current directory. The current directory is represented by a `.` (dot).
+
+```{python}
+! ls 
+```
+
+## Creating a new directory
+
+The `mkdir` command creates a new directory in the specified path. For example, to create a new directory in the current directory we can write
+
+```{python}
+! mkdir new_directory 
+```
+
+We can check its existence with `ls`.
+
+```{python}
+! ls
+```
+
+Equally, we can go back to the `jupyter` interface and see the new directory in the graphical user interface.
+
+## Changing directory
+
+It is easy to change the current directory with the `cd` command. For example, to go to the `new_directory` with
+
+```{python}
+! cd new_directory
+```
+
+And we we can go back to the previous directory with the `cd` command again using `..`
+
+```{python}
+! cd ..
+```
+
+## Creating an empty file
+
+The `touch` command creates a new file in the specified path. For example, to create a new file in the current directory we can write
+
+```{python}
+! touch new_directory/new_file.txt
+```
+
+
+We can check its existence with `ls`.
+
+```{python}
+! ls new_directory
+```
+
+We can open this file in the graphical user interface and edit the contents
+
+
+[follows demonstration in *Noteable* with dummy text in the file `new_file.txt`]
+
+## Viewing file content
+
+The `cat` command prints the content of a file. For example, to view the content of `new_file.txt` we can write
+
+```{python}
+! cat new_directory/new_file.txt 
+```
+
+Several other commands exist to display parts of files, such as `head`, `tail` etc. Try them if you like!
+
+## Exercise
+
+- Create a new jupyter notebook using the graphical user interface.
+- From the **notebook**, use the commands above to create:
+    - a new directory called `src`
+    - a new file inside the directory called `naive_script.py`
+    - open it with double click for the files tab in `jupyter` and write a minimal code
+
+    ```python
+    print("Hello, World!")
+
+    ```
+
+
+
+    - save the file
+    - use the `cat` command from the notebook to view the content of `naive_script.py`
+
+
+## Running scripts: from the notebook
+
+For the entire duration of this course, you have been running `python` codes by typing them inside the notebook cells and executing the code cells.
+
+The notebooks are complex files, that contain a lot of information beyond your code: the markdown, images, and a lot of extra data (called metadata).
+
+A much more essential way to store `python` code is to use **scripts**. These are files with the `.py` extension, like your `naive_script.py` file. Inside a script you can only have
+
+- `python` code
+- `python` comments to the code (i.e. lines prepended by the `#`)
+
+This means that the scripts are simple, portable pure text files containing **instructions** in the `python` language.
+
+Can we execute such instructions? Yes, we **run** a script in various way. A simple way is to do it directly from a code  cell in the notebook. For this we use a special `jupyter` command called `run` followed by the path to the script.
+
+[check that you are in the correct path and the script exist]
+
+```{python}
+run src/naive_script.py
+```
+
+As you can see, we have executed the instructions of the script and its textual output has been printed in the notebook. No variables are created during the process.
+
+## The Terminal
+
+
+All the commands that we have seen above can be used in a pure-text environment called **the terminal**. The terminal is a text-based interface to an operating system (local or remote).
+
+
+You do not use the mouse to perform actions. Instead, you **write** commands. These commands belong to the scripting language called `bash` (see [here](https://www.gnu.org/software/bash/manual/html_node/index.html) for more information). It is different from `python`, they can interact together in the notebook.
+
+
+You can launch a terminal directly from `Noteable` by clicking on the `New` button, then selecting `Terminal`.
+
+
+![image.png](attachment:image.png)
+
+## Exercise
+
+- We try to navigate folders from the terminal and create a file
+- Open the terminal and
+    - change the directory to `src` (using `cd`)
+    - create a new file inside the directory called `parabola.py` (use `touch`)
+    - go back to the `Noteable` file tab, refresh the web-page and open the `parabola.py`  file
+    - open it and write a minimal code to plot a parabola. For example:
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    a = 1.
+    b =1.
+    c = 2
+    xlo = 0
+    xhi = 10
+    npoints = 100
+    x = np.linspace(xlo, xhi, npoints)
+    y = a*x**2 + b*x + c
+    plt.plot(x,y)
+    plt.savefig("parabola.png")
+
+
+    ```
+
+    - save the file and go back to the Terminal tab
+    - use the `cat` command to check the content 
+
+
+##  Exercise: Running scripts from the Terminal
+
+We have seen that we can run the scripts from the notebook using the `run` command. In a very similar way, we can run scripts from the terminal, just by using the `python` command followed by the path to the script.
+
+
+Do the following:
+
+- first run the `parabola` script from the notebook using `run`: you should see the plot appear in the notebook.
+- then go back to the Terminal and run the `parabola.py` script using the `python` command followed by the path to the script: e.g.  `python src/parabola.py`. Where is the output?
+
+```{python}
+run src/parabola.py
+```
+
+## Reusing code
+
+
+The most useful feature of the scripts is that they can store code for future usage in an organized manner. We do not need to have all of our code in a single notebook: we can split the relvant bits, put them into scripts and use them again and again in different projects.
+
+What allows us to do this is the  special `python` keywork `import`, that we have already used many times. 
+
+
+Let's move our working directory to `src` and try importing our `parabola.py` script
+
+```{python}
+cd src
+```
+
+In `python` we can only import `.py` files, so we drop the `.py` extension when importing.
+
+```{python}
+import parabola
+```
+
+Now the variables defined in `parabola.py` are available in our current notebook.
+
+```{python}
+print(parabola.xhi)
+```
+
+Congratulations! You have written your first `python` **module**!
+
+## Exercise
+
+The module above is not very useful. A better way to reuse code is to encapsulate it in a **custom .
+
+
+- Modify your `parabola.py` script to create a function `plot_parabola` that takes `a`, `b`, `c`, `xlo`, `xhi` as parameters.
+
+- Then, import your parabola module in the present notebook using the following line:
+
+    ```python
+    import parabola as pb
+    ```
+
+-  Can you find a way to access your function `plot_parabola` from `pb` ?
+- Improve your function to customize the appearence of the plot (adding custom labels, colors, linestyles) and use the function with such changes. **Important** you will need to restart the notebook for these to take effect, because a module is loaded only once.
+
+
+## More exercises on the terminal
+
+
+1.  Most commands in `bash` allow you to acces their documentation with `<name_of_the_command> --help `. Can you find out what the command `mv` does?
+
+
+```{python}
+##YOUR CODE HERE
+```
+
+
+2. Find a way to rename your `parabola.py` script to `geometry.py`
+
+```{python}
+##YOUR CODE HERE
+```
+
+Most commands in `bash` support options, using the dash `-` sytax. For example, `ls -l` will list the files in a long format. Can you use  `ls --help` to find out what the `-l` option does
+
+```{python}
+ls --help
+```
+
+
+- Can you find an additional option for `ls -l` to fils files in reverse time order?
+
+```{python}
+##YOUR CODE HERE
+```
+
+## Riddles
+
+To revise the material from the previous lectures, we can try to solve some riddles.
+
+You can find the exercises here below
+
+- [Python Riddles](exercises_python_riddles.qmd)
+- [Numpy Riddles](exercises_numpy_riddles.qmd)
+
+

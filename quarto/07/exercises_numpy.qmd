@@ -1,0 +1,147 @@
+---
+title: '`numpy` Exercises'
+jupyter: python3
+---
+
+
+These exercises test your understanding of the NumPy concepts covered in the introduction notebook.
+
+
+## Exercise 1: Import and Basic Array Creation
+
+**Task:** Import NumPy with the standard `import` command and create a NumPy array from the list `[2, 4, 6, 8, 10, 12]`. Print the array, its data type, and its shape.
+
+```{python}
+# Your code here
+```
+
+## Exercise 2: Array Indexing and Slicing
+
+**Task:** Using the array you created in Exercise 1:
+- Print the first element
+- Print the last element
+- Print elements from index 2 to 4 (inclusive of 2, exclusive of 5)
+- Print every second element
+
+```{python}
+# Your code here
+```
+
+## Exercise 3: Element-wise Operations
+
+**Task:** Create a NumPy array `arr = np.array([1, 4, 9, 16, 25])`. Perform the following operations and print the results:
+- Multiply each element by 3
+- Add 10 to each element
+- Calculate the square root of each element
+- Apply the sine function to each element
+
+```{python}
+# Your code here
+```
+
+## Exercise 4: Array Operations with Two Arrays
+
+**Task:** Create two NumPy arrays:
+- `arr1 = np.array([1, 2, 3, 4, 5])`
+- `arr2 = np.array([10, 20, 30, 40, 50])`
+
+Perform element-wise operations and print the results:
+- Add the two arrays
+- Subtract arr1 from arr2
+- Multiply the two arrays
+- Divide arr2 by arr1
+
+```{python}
+# Your code here
+```
+
+## Exercise 5: Shape Mismatch Error
+
+**Task:** Create two arrays with different lengths:
+- `arr_a = np.array([1, 2, 3, 4])`
+- `arr_b = np.array([10, 20])`
+
+Try to add these arrays together. What happens? Write the code and explain the error in a comment.
+
+```{python}
+# Your code here
+```
+
+## Exercise 6: Reductive Operations
+
+**Task:** Create a NumPy array `data = np.array([12, 8, 15, 3, 7, 20, 11, 9])`. Calculate and print:
+- The sum of all elements
+- The mean (average) of all elements
+- The maximum value
+- The minimum value
+- The standard deviation
+
+```{python}
+# Your code here
+```
+
+## Exercise 7: Array Manipulation
+
+**Task:** Create a NumPy array `numbers = np.array([5, 2, 8, 1, 9, 3])`. Perform the following operations:
+- Sort the array and print the result
+- Calculate the cumulative sum and print the result
+- Create a new array with duplicates: `with_duplicates = np.array([5, 2, 8, 1, 9, 3, 5, 2, 1])` and find the unique elements
+
+```{python}
+# Your code here
+```
+
+## Exercise 8: List vs NumPy Comparison
+
+**Task:** Compare the flexibility of lists vs NumPy arrays:
+1. Create a Python list containing mixed data types: `mixed_list = [1, 'hello', 3.14, True]`
+2. Try to create a NumPy array from this list. What happens to the data types?
+3. Create a list of numbers: `num_list = [1, 2, 3, 4, 5]`
+4. Try to multiply the entire list by 2 using `num_list * 2`. What happens?
+5. Create a NumPy array from the same numbers and multiply by 2. Compare the results.
+
+```{python}
+# Your code here
+```
+
+## Exercise 9: Performance Comparison
+
+**Task:** Compare the performance of list comprehension vs NumPy operations:
+1. Import the `time` module
+2. Create a range of 50,000 numbers using numpy `np.arange()`
+3. Time how long it takes to square each number using a **list comprehension**, i.e. the syntax `[x**2 for x in myarray]`
+4. Time how long it takes to square each number using NumPy operations
+5. Calculate and print how many times faster the NumPy operation is
+
+```{python}
+# Your code here
+```
+
+## Exercise 10: Complex Operations
+
+**Task:** Create a NumPy array representing angles in degrees: `angles_deg = np.array([0, 30, 45, 60, 90, 120, 180])`
+1. Convert these angles to radians (hint: multiply by π/180, use `np.pi`)
+2. Calculate the sine and cosine of each angle
+3. Verify that sin²(x) + cos²(x) = 1 for each angle (use `np.sin()` and `np.cos()`)
+4. Print all results
+
+```{python}
+# Your code here
+```
+
+```{python}
+# Your code here
+```
+
+## Challenge Exercise: Temperature Conversion
+
+**Task:** You have temperature readings in Celsius: `celsius_temps = np.array([0, 10, 20, 25, 30, 35, 40])`
+
+1. Convert all temperatures to Fahrenheit using the formula: F = (C × 9/5) + 32
+2. Convert all temperatures to Kelvin using the formula: K = C + 273.15
+3. Calculate the temperature range (max - min) for each scale
+
+```{python}
+# Your code here
+```
+

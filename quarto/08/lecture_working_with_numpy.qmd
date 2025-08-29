@@ -1,0 +1,386 @@
+---
+title: 'Working with Arrays in NumPy: Indexing and Random Data Generation'
+jupyter: python3
+---
+
+
+
+NumPy is a powerful library for numerical computing in Python, providing efficient multi-dimensional array operations and a wide range of mathematical functions. With NumPy, you can perform fast element-wise computations, advanced indexing, slicing, and generate random data for simulations and analysis.
+
+This notebook illustrates array indexing, boolean arrays, generating sequences using `np.arange` and `np.linspace`, and generating random samples with NumPy's random number generator.
+
+
+## Array indexing, slicing, views and copies
+
+Indexing in NumPy allows you to access and modify individual elements or groups of elements within an array. You can use integer indices, slices, and even boolean arrays to select data efficiently. For example:
+
+- **Integer Indexing:** Select a single element by its position.
+- **Slicing:** Extract a range of elements.
+- **Boolean Indexing:** Filter elements based on a condition.
+
+### Integer indexing
+
+We have already seen that the lements of an array are idnexed similarly to lists. The syntax simply requires you to enter the integer index of the element you want to access. For example, if you have an array `arr`, you can access the element at index 1 using `arr[1]`. You can also slice arrays using the same syntax as lists, such as `arr[1:4]` to get elements from index 1 to 3.
+
+```{python}
+import numpy as np
+
+arr = np.array([10, 20, 30, 40, 50])
+print("Array:", arr)
+print("Element at index 1:", arr[1])
+```
+
+### Slicing
+
+**Slicing** allows you to extract a portion of an array by specifying a start index, an end index, and an optional step. The syntax is similar to that used for lists in Python. For example, `arr[1:4]` retrieves elements from index 1 to 3 (the end index is exclusive).
+
+
+```{python}
+
+print("Slice from index 1 to 3:", arr[1:4])
+```
+
+### Advanced Slicing Techniques
+
+NumPy slicing can be extended beyond basic start and end indices:
+
+- **Step Size:** Use a third parameter to specify the step, e.g., `arr[::2]` selects every other element.
+- **Negative Indices:** Negative values index from the end, e.g., `arr[-3:]` gets the last three elements.
+- **Reverse Slicing:** Use a negative step to reverse an array, e.g., `arr[::-1]`.
+
+
+```{python}
+# Step size: select every other element
+print("Every other element:", arr[::2])
+
+# Negative indices: last three elements
+print("Last three elements:", arr[-3:])
+
+# Reverse slicing: reverse the array
+print("Reversed array:", arr[::-1])
+
+# Selecting all elements
+print("All elements:", arr[:])
+```
+
+
+Slicing creates **views**, not copies, so modifying a slice affects the original array. Use `arr.copy()` to create a copy if needed.
+
+A **view** is a new array object that looks at the same data as the original array. Changes made to a view will affect the original array, since they share the same underlying data. For example, `arr[1:4]` returns a view of `arr`, not a separate copy.
+
+```{python}
+# Demonstrating that slicing creates a view, not a copy
+slice_view = arr[2:5]
+print("Original array before modification:", arr)
+slice_view[0] = 99  # Modify the view
+print("Modified slice_view:", slice_view)
+print("Original array after modification:", arr)  # arr is also changed
+```
+
+Slices can be programmaticaly generated using the `slice` function, which allows you to create a slice object that can be reused. For example, `s = slice(1, 4)` creates a slice object that can be used as `arr[s]` to get the same result as `arr[1:4]`.
+
+```{python}
+# Creating an independent copy of a slice
+example_slice = slice(1, 4, 2)
+print("Using slice(1, 4, 2) on arr:", arr[example_slice])
+```
+
+To create an **independent copy** of an array (rather than a view), use the `copy()` method. For example, `arr_copy = arr[1:4].copy()` creates a new array with its own data, so changes to `arr_copy` will not affect the original `arr`. This is useful when you want to modify a subset of an array without altering the original data.
+
+```{python}
+# Creating an independent copy of a slice
+arr_copy = arr[2:5].copy()
+arr_copy[0] = 100  # Modify the copy
+print("arr_copy:", arr_copy)
+print("Original arr:", arr)  # arr remains unchanged
+```
+
+### Boolean Indexing
+
+Boolean indexing allows you to select elements from an array based on a condition. When you apply a condition to a NumPy array, it returns a **boolean** (an array that contains only True/False values ) array indicating which elements satisfy the condition. You can then use this boolean array to filter the original array, extracting only the elements that meet the criteria. This technique is powerful for data selection and analysis.
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5, 6])
+threshold = 3
+bool_mask = arr > threshold
+print("Original array:", arr)
+print(f"Boolean mask for threshold {threshold}:", bool_mask)
+print("Filtered values:", arr[bool_mask])
+```
+
+### Using `np.where` for conditional selection
+
+The `np.where` function in NumPy is a powerful tool for conditional selection and element-wise operations. It allows you to choose values from arrays based on a condition, returning indices or constructing new arrays.
+
+- **Basic usage:**  
+    `np.where(condition)` returns the indices where the condition is `True`.
+
+
+
+```{python}
+np.where(arr > threshold)
+```
+
+`np.where(arr > threshold)` returns a tuple because, for 1D arrays, it provides the indices where the condition is `True`. In NumPy, the output is always a tuple of arrays—one for each dimension of the input array. For a 1D array, it's a single-element tuple containing the indices. For higher dimensions, it returns a tuple with arrays for each axis. This consistent tuple format makes it easy to handle multi-dimensional indexing.
+
+So, for 1D arrays as the ones considered up to now, we should get the indices by extracting the first element of the tuple returned by `np.where`
+
+```{python}
+np.where(arr > threshold)[0]
+```
+
+
+- **Element-wise selection:**  
+    `np.where(condition, x, y)` returns elements from `x` where the condition is `True`, and from `y` where it is `False`. Here the result is an array of the same shape as `x` and `y`, containing values from `x` where the condition is met, and from `y` otherwise. This is useful for creating new arrays based on conditions without using loops.
+
+
+
+
+```{python}
+a  = np.array([1, 2, 3, 4, 5])
+b = np.array([-1,-2, -3, - 4, -5])
+c = np.array([10, 20, 30, 40, 50])
+
+result = np.where(a > 2, x, y)
+print(result)
+```
+
+
+
+This creates a new array where each element is `100` if the condition is met, otherwise `0`.
+
+## Function to generate numerical arrays
+
+NumPy provides automated methods for generating numerical sequences, which are essential for simulations, sampling, and creating structured data. 
+
+### Generating sequences
+
+The two most used functions for generating  ordered numerical sequences in NumPy are `np.arange` and `np.linspace`.
+
+- **`np.arange(start, stop, step)`**: Generates an array of evenly spaced values within a specified range. The `start` value is inclusive, while the `stop` value is exclusive. The `step` parameter defines the spacing between values.
+  
+  Example: `np.arange(0, 10, 2)` produces `[0, 2, 4, 6, 8]`.
+
+- **`np.linspace(start, stop, num)`**: Creates an array of `num` evenly spaced values between `start` and `stop`, inclusive. This is useful for generating a specific number of points in a range.
+
+
+
+
+```{python}
+print("np.arange(0, 10, 2):", np.arange(0, 10, 2))
+print("np.linspace(0, 1, 5):", np.linspace(0, 1, 5))
+```
+
+Most importantly, these functions can be used to create arrays of any kinds of numerical data, including integers and floating-point numbers. 
+
+```{python}
+# integers
+np.arange(0, 10, 2)  # Creates an array with values from 0 to 10 with a step of 2
+```
+
+```{python}
+# floating-point numbers
+np.arange(0.0, 1.0, 0.2)  # Creates an array with values from 0.0 to 1.0 with a step of 0.2
+```
+
+```{python}
+# complex numbers, by using the data type specifier `dtype=complex`
+np.arange(0, 10, 2, dtype=complex)  # Creates an array with complex numbers from 0 to 10 with a step of 2
+```
+
+Notice that `linspace` is useful when we know the start and end value and the specific number of points we want to generate, while `arange` is useful when we know the start and end value and the step size between the points.
+
+## Generating filled arrays
+
+NumPy provides functions to create arrays filled with specific values, such as zeros, ones, or a constant value. These functions are useful for initializing arrays before performing computations.
+
+The main functions for generating filled arrays are:
+- **`np.zeros(shape)`**: Creates an array filled with zeros, where `shape` specifies the dimensions of the array.
+- **`np.ones(shape)`**: Creates an array filled with ones.
+- **`np.full(shape, fill_value)`**: Creates an array filled with a specified value (`fill_value`), where `shape` defines the dimensions of the array.   
+- **`np.empty(shape)`**: Creates an uninitialized array with the specified shape. The values in this array are not set to any particular value, so they may contain random data.
+
+There are also functions that create arrays with the same shape and type as an existing array, which can be useful for initializing arrays that will be used in computations:
+
+- **`np.zeros_like(array)`**: Creates an array of zeros with the same shape and type as the input array.
+- **`np.ones_like(array)`**: Creates an array of ones with the same shape and type as the input array.
+- **`np.full_like(array, fill_value)`**: Creates an array filled with a specified value, with the same shape and type as the input array.
+
+```{python}
+# Examples using filled array generation functions
+
+# Create a 1D array of zeros with the same shape as arr
+zeros_arr = np.zeros_like(arr)
+print("Zeros array:", zeros_arr)
+
+# Create a 1D array of ones with the same shape as arr
+ones_arr = np.ones_like(arr)
+print("Ones array:", ones_arr)
+
+# Create a 1D array filled with the value 7, same shape as arr
+full_arr = np.full_like(arr, 7)
+print("Full array (filled with 7):", full_arr)
+
+# Create an uninitialized array (values may be random, or zeros)
+empty_2d = np.empty(5)
+print("An empty array:\n", empty_2d)
+```
+
+## Random Data Generation
+
+Random data generation is essential for simulations, statistical modeling, and testing algorithms. 
+
+For example, you might want to generate random samples from a normal distribution to simulate real-world data or create random datasets for testing purposes. Or you may want to simulate the effect of measurement errors in your data analysis. Or you may want to sub-sample a large dataset randomly to take a representative sample without bias.
+
+To do all this, one needs methods to sample numbers that possess the statistical properties of the desired distribution, such as uniform, normal, or binomial distributions.
+
+Strictly speaking (classical) computers are **deterministic machines**, meaning they follow a set of rules and produce the same output for the same input every time. We have therefore to use algorithms to produce sequences of numbers that mimic the properties of random numbers.
+
+These are called **pseudo-random numbers**. Pseudo-random number generators (PRNGs) use algorithms to produce sequences of numbers that appear random but are actually deterministic.
+
+A simple and classic example of a pseudo-random number generator is the **Linear Congruential Generator (LCG)**. The LCG produces a sequence of numbers using the recurrence relation:
+
+$$x_{n+1} = (a \times  x_{n} + c)\,\mathrm{mod}\, m$$
+
+where  
+- $x_n$ is the current value,  
+- $a$ is the multiplier,  
+- $c$ is the increment,  
+- $m$ is the modulus.
+
+In *vanilla* Python this looks like the following custom function
+
+```{python}
+def lcg(seed, a=1664525, c=1013904223, m=2**32, size=10):
+    nums = []
+    x = seed
+    for _ in range(size):
+        x = (a * x + c) % m
+        nums.append(x)
+    return nums
+```
+
+```{python}
+# Example usage:
+lcg_sequence = lcg(seed=42, size=5)
+print("LCG sequence:", lcg_sequence)
+```
+
+
+
+
+This will generate a sequence of pseudo-random integers. The choice of parameters (`a`, `c`, `m`) affects the quality and period of the generator.
+
+```{python}
+# Example of LCG with a short period by choosing small modulus
+short_period_seq = lcg(seed=1,  a=5, c=3, m=16, size=20)
+print("LCG sequence with short period:", short_period_seq)
+```
+
+The **seed** is crucial: it is the initial value that starts the algorithm to determin the subsequent values in the sequence. By setting the seed, you can ensure that the sequence is **reproducible**, meaning that running the same code with the same seed will produce the same sequence of numbers every time.
+
+In numpy, we do not need to implement our own LCG, as it provides a built-in random number generator that is based on the Mersenne Twister algorithm, which is a widely used and efficient pseudo-random numbwer generator.
+
+What we do instead is to use the `numpy.random` **sub-module**, which provides a wide range of functions for generating random numbers from various distributions, including uniform, normal, and binomial distributions.
+
+
+The standard way to to use it is the following:
+
+- first, one initialises a new kind of object called a **random number generator** (RNG) using `np.random.default_rng()`.  This is a `numpy` object capable of generating random numbers from various distributions. It allows us in particular to set the **seed** and therefore ensure reproducibility.
+
+```{python}
+rng = np.random.default_rng(seed=123)
+```
+
+We can do this at any point in our code, but it is a good practice to do it at the beginning of our script or notebook, so that we can ensure that all random numbers generated in the script are reproducible. Putting the generator elsewhere (for example, inside a function) could lead to unexpected results, as the generator would be re-initialised each time the function is called.
+
+Once we have a generator we can access any of its method to sample numbers from various distributions
+
+For example:
+
+
+
+### Integers
+
+To sample uniformly distributed integers, we can use the `integers` method of the generator. This method allows us to specify a range and the number of integers to generate.
+
+```{python}
+rng.integers(0, 100, size=5)  # 5 random integers between 0 and 100
+```
+
+### [0-1) uniform floats
+
+To sample uniformly distributed floats between 0 and 1, we can use the `random` method of the generator. This method generates random floats in the range [0.0, 1.0) (which means 0 included and 1 excluded).
+
+```{python}
+rng.random(1000)
+```
+
+Alternatively, we can use the `uniform` method to sample uniformly distributed floats in a specified range. This method allows us to specify the lower and upper bounds of the range, as well as the number of samples to generate.
+
+```{python}
+rng.uniform(0,1,1000)
+```
+
+### Normal distribution
+
+To sample from a normal distribution, we can use the `normal` method of the generator. This method allows us to specify the mean and standard deviation of the distribution, as well as the number of samples to generate. The generated samples will follow a normal (Gaussian) distribution with the specified parameters.
+
+```{python}
+normal_rv = rng.normal(loc=0, scale=4, size=10000)  # 10000 samples from a normal distribution with mean 0 and std dev 1
+```
+
+```{python}
+# check that the sample mean and standard deviation are close to the specified values 
+
+normal_rv.mean()
+```
+
+```{python}
+normal_rv.std()
+```
+
+## Sampling a siingle value 
+
+If we only want to sample a single  value, we can simply not specify the `size` parameter, or set it to `1`. This will return a single value sampled from the specified distribution.
+
+```{python}
+rng.integers(0,100) # run this multiple times to observe the random nature of the output
+```
+
+However, this can sometimes be more computationally costly than generating a larger sample and then selecting a single value from it. 
+
+```{python}
+import time
+
+# Timing a for loop that generates a random integer in each iteration
+start_time = time.time()
+steps = 1000000
+for _ in range(steps):
+    # use a random value
+    val = 2*rng.integers(0, 100)
+elapsed_no_prealloc = time.time() - start_time
+
+# Timing a for loop that uses preallocated random integers
+preallocated = rng.integers(0, 100, size=steps)
+start_time = time.time()
+for u in preallocated:
+    val = 2*u  # use the preallocated value
+elapsed_prealloc = time.time() - start_time
+
+print(f"Time without preallocation: {elapsed_no_prealloc:.4f} seconds")
+print(f"Time with preallocation: {elapsed_prealloc:.4f} seconds")
+```
+
+This is a good example of the tradeoff between memory usage and computational efficiency: in modern machines, memory is quite cheap, so it is often more efficient to preallocate a larger array and then sample from it, rather than generating a single value at a time.
+
+A good size for preallocated numbers depends on your use case and available memory. Typical choices are:
+
+- Small tasks: `100` to `1,000` elements
+- Medium tasks: `10,000` to `100,000` elements
+- Large tasks: `1,000,000` or more elements
+
+For most data analysis or simulation tasks, starting with `100,000` elements is practical and efficient. Always ensure the size fits within your system's memory limits.
+
+
+

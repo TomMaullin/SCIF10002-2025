@@ -1,0 +1,59 @@
+/* Custom styles for the course website */
+
+.navbar-brand {
+  font-weight: bold;
+}
+
+.sidebar-navigation .sidebar-item a {
+  color: #333;
+}
+
+.sidebar-navigation .sidebar-item a:hover {
+  background-color: #f8f9fa;
+  color: #0d6efd;
+}
+
+/* Module section styling */
+.sidebar-navigation .sidebar-section .sidebar-section-item {
+  font-weight: 600;
+  color: #0d6efd;
+}
+
+/* Code block styling */
+.sourceCode {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 0.375rem;
+}
+
+/* Notebook cell styling */
+.cell {
+  margin: 1.5rem 0;
+}
+
+.cell-output {
+  margin-top: 1rem;
+}
+
+/* Table styling */
+table {
+  margin: 1rem 0;
+}
+
+/* Exercise and solution highlighting */
+.cell:has(.cell-code:contains("# Exercise")) {
+  border-left: 4px solid #28a745;
+  padding-left: 1rem;
+}
+
+.cell:has(.cell-code:contains("# Solution")) {
+  border-left: 4px solid #007bff;
+  padding-left: 1rem;
+}
+
+/* Footer styling */
+.nav-footer {
+  margin-top: 2rem;
+  border-top: 1px solid #e9ecef;
+  padding-top: 1rem;
+}

@@ -1,0 +1,382 @@
+---
+title: The `numpy` module
+
+format: 
+  pptx:
+    reference-doc: template.pptx
+  revealjs:
+    theme: 
+      - simple
+      - styles.scss
+    highlight-style: github
+    code-block-bg: true
+    code-block-border-left: "#31BAE9"
+    code-block-font-size: 0.45em
+    code-copy: true
+    code-overflow: wrap
+    incremental: true
+    smaller: true
+    scrollable: true
+    slide-number: true
+    self-contained: true
+
+
+execute:
+  echo: true
+  eval: true
+  warning: false
+  error: true
+---
+
+## Aims
+
+By the end of this lecture, you will be able to:
+
+- Explain what the NumPy module is and why it is used
+- Create and manipulate NumPy arrays
+- Perform element-wise operations and mathematical functions on arrays
+- Compare NumPy arrays with Python lists in terms of performance and functionality
+- Use basic aggregation and array manipulation functions in NumPy
+
+## What is `numpy`?
+
+**NumPy** is a Python library that makes working with numbers and large collections of data fast and easy. 
+
+![Complete description at [https://numpy.org](https://numpy.org)](https://numpy.org/doc/stable/_static/numpylogo.svg)
+
+It provides special **array** objects and tools for doing math efficiently, which is useful for data analysis and scientific computing.
+
+. . .
+
+It is imported in your session using the following command
+
+```python
+import numpy
+```
+. . .
+
+We will follow a common practice and use a shorthand with the `as` syntax
+
+```python
+import numpy as np
+```
+. . .
+
+So `np` will always mean `numpy` for us.
+
+## Arrays vs lists
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**Python Lists**
+
+- Ordered, Mutable  
+- Mixed data types
+- Explicit operations needed
+- Slower performance
+:::
+
+::: {.column width="50%"}
+**NumPy Arrays**
+
+- Ordered, Mutable
+- **One** data type per array
+- Element-wise operations
+- Fast & memory efficient
+:::
+::::
+
+. . .
+
+:::: {.columns}
+
+::: {.column width="50%"}
+```{python}
+list_ex = [1, 2, 3, 4]
+print(list_ex)
+```
+
+:::
+
+::: {.column width="50%"}
+```{python}
+import numpy as np
+#notice that we explicitly call the np.array()
+arr_ex = np.array([1, 2, 3, 4]) 
+print(arr_ex)
+```
+
+:::
+::::
+
+
+We are going to see these differences in detail.
+
+---
+
+## Arrays from lists
+
+A purely numerical list can readily be converted to an array.
+
+
+```{python}
+import numpy as np
+# Create array from list
+list1 = [1.,1.,2.,3.,5.,8.]
+arr1 = np.array(list1)
+print(arr1)
+```
+
+. . .
+
+The type of the elements yields the **data type** of the array
+
+```{python}
+print(arr1.dtype)
+```
+
+> Try and change the list1 object to contain only integers and see the change!
+
+---
+
+
+## Array properties
+
+Arrays possess plenty of properties.
+
+These are accessed with the `.` notation^[use `.` and then `TAB` to see all of the properties].
+
+```{python}
+print(f"Data type: {arr1.dtype}")
+print(f"Shape: {arr1.shape}")
+print(f"Shape: {arr1.size}")
+```
+
+For now, we consider only 1d arrays, i.e. sequences. Their length is is their `size` and corresponds to the first element of the property `shape`.
+
+---
+
+## Accessing array elements
+
+Similarly to lists, we access an element in an array via zero-based **indexing**
+
+
+```{python}
+print(arr1[0])    # First element
+print(arr1[-1])   # Last element
+```
+
+Again, similarly to lists, we can access regions of the array via **slicing**
+
+```{python}
+print(arr1[3:6])  # Elements from index 3 to 6
+```
+
+---
+
+
+## Element-wise Operations
+
+The main motivation to use arrays is that lists are cumbersome when performing maths.
+
+Suppose we have a list and want to double all of its elements:
+
+```{python}
+list1 = [1,2,3,4]
+```
+We need to loop over all of them and create a new list
+```{python}
+list2 = []
+for item in list1:
+    list2.append(2*item)
+print(list2)
+```
+
+In fact, we can do this in a slightly more compact way using **list comprehension** 
+
+```{python}
+list2 = [item*2 for item in list1]
+```
+Still, an explicit loop is needed. Loops in Python are **slow**.
+
+## Element-wise Operations
+
+The `numpy` syntax avoids the explicit Python loop.
+
+```{python}
+arr1 = np.array(list1)
+arr2 = 2*arr1
+print(arr2)
+```
+This is not just a cosmetic change: under the hood `numpy` uses an efficient architecture that performs operations in **compiled code**, making it much faster than Python loops.
+
+
+---
+
+## Performance advantage
+
+This performance difference can be tracked explicitly. 
+
+We create a large list and a large array with identical content
+```{python}
+# Create a large list and array
+large_list = list(range(1_000_000))
+large_array = np.array(large_list)
+```
+And then track the time for the two operations
+```{python}
+import time
+#  Track the time taken for the list multiplication
+start = time.time()
+list_result = [x * 2 for x in large_list]
+end = time.time()
+print(f"List comprehension time: {end - start:.5f} seconds")
+
+# Time array multiplication
+start = time.time()
+array_result = large_array * 2
+end = time.time()
+print(f"NumPy array time: {end - start:.5f} seconds")
+```
+
+---
+
+##  General mathematical functions
+
+The multiplication we performed earlier is done **element-wise**: every element is update according to teh same rule.
+
+We can apply plenty of element-wise operations to the arrays. 
+
+Many of these are available as `numpy` functions directly accessed from the `np.` module
+```{python}
+# Element-wise functions
+print(f"Square root: {np.sqrt(arr1)}")
+print(f"Mean: {np.mean(arr1)}")
+print(f"Cosine: {np.cos(arr1)}")
+```
+
+. . .
+
+The operations do not modify the original array, but produce **new copies**
+```{python}
+arr2 = arr1*3/2 + 5
+print(f"Original: {arr1}")
+print(f"Modified: {arr2}")
+```
+
+---
+
+
+## Sums
+
+Other convenent `numpy` functions allow you to accumulate values without loops.
+
+Assume we have an array $x$
+
+```{python}
+x = np.array([1,2,3,4,5,6,7,8])
+```
+
+**Sums**
+
+$$
+S = \sum_{i=1}^{n} x_i
+$$
+
+In NumPy, this is translated as:
+
+```{python}
+S = np.sum(x)
+print(S)
+```
+
+## Sums
+
+**Cumulative sums**
+
+A cumulative sum is a sequence where each element is the sum of all previous elements up to that position.
+$$
+y_i = \sum_{j=1}^{i} x_j
+$$
+
+In NumPy, this is translated as:
+
+```{python}
+ y = np.cumsum(x)
+ print(y)
+```
+---
+
+## Example: molecular masses
+
+Let's consider the formula for the **molecular mass** of a compound:
+
+$$
+M = \sum_{i=1}^{n} a_i m_i
+$$
+
+where
+
+- $a_i$ is the number of atoms of element $i$
+- $m_i$ is the atomic mass of element $i$
+
+. . .
+
+With `numpy`, you can compute this as:
+
+```{python}
+a = np.array([2, 1, 4])      # Number of atoms for each element
+m = np.array([12.01, 1.01, 16.00])  # Atomic masses (e.g., C, H, O)
+M = np.sum(a * m)
+print(f"Molecular mass: {M}")
+```
+
+---
+
+## Operations between arrays
+
+You can perform arithmetic operations directly between arrays of the same shape. Operations like addition, subtraction, multiplication, and division are applied **element-wise**.
+
+For example:
+
+**Element-wise operations:**
+```{python}
+added = arr1 + arr2
+multiplied = arr1 * arr2
+print(f"Added: {added}")
+print(f"Multiplied: {multiplied}")
+```
+
+. . .
+
+**Note:** Arrays must have compatible shapes!
+
+```{python}
+arr3 = np.array([1, 2, 3])
+arr4 = np.array([4, 5])
+result = arr3 + arr4
+```
+
+--- 
+
+## Combining arrays
+
+With lists, the `+` operator concatenated different lists. Since for arrays the sign `+` corresponds to true mathematical addition, a dedicated concatenation function exists:
+```{python}
+combined = np.concatenate([arr1, arr2])
+print(f"Unique elements: {combined}")
+```
+
+Many other variations of concatenation exist. Consult the [documentation](https://numpy.org/doc/stable/).
+
+---
+
+## Key Takeaways
+
+- **NumPy arrays** are optimized for numerical operations
+- **Element-wise operations** work implicitly
+- **Performance benefits** for large datasets
+- **Mathematical functions** apply to entire arrays
+- **Shape compatibility** required for operations
+- Choose the **right tool** for your task

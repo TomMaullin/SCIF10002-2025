@@ -1,0 +1,65 @@
+---
+title: Answers
+jupyter: python3
+---
+
+
+# Creating a mask containing a circle
+
+## Pair programming: part 1
+
+
+### Exercise A
+
+Create a 100 x 100 square grid containing a circle. The centre of the circle should be at position `x = 40`, `y = 50` and have a radius of 10. Call your output `circular_mask`.
+
+*Break this idea down into the different steps:*
+ - *Start by creating an array - how could you create an array of the right shape?*
+ - *How would you turn the equation above into code?*
+ - *How would you evaluate one (x, y) position to start with?*
+ - *How do you move on to evaluate every position?*
+ - *...*
+
+**Important note**: For `numpy` remember that the axes are opposite to what you would expect for an x-y grid - they store data as *row-major* meaning you access the row as the first index (y) and the column as the second index (x). This means position `arr[1, 0]` would be at position (0, 1) in x, y co-ordinates rather than (1, 0) as you may expect.
+
+When completed, you can use the plotting code below to show your mask. This uses a `matplotlib` function called `imshow` ([documentation](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html); [example from image gallery](https://matplotlib.org/stable/gallery/images_contours_and_fields/image_demo.html)) which can plot your 2D data on a grid.
+
+```{python}
+# ADD CODE HERE
+import numpy as np
+
+n  = 100
+circular_mask = np.zeros((n,n))
+x0, y0 = 40,50
+radius = 10
+rows, cols = np.indices(circular_mask.shape)
+
+circular_mask = ((rows-y0)**2+(cols-x0)**2)<=radius**2
+
+```
+
+```{python}
+### UNCOMMENT THIS CODE TO PLOT YOUR MASK WHEN COMPLETED
+
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots(figsize=(6, 3.2))
+
+ax.set_title('Circular Mask')
+ax.imshow(circular_mask,cmap="bone",origin="lower") # Setting colourmap (cmap) and the position of 0,0 (origin) on the plot
+```
+
+---
+
+*Extended*:
+
+1. Consider how you could create a mask for a rectangle rather than a circle (or a square)
+
+```{python}
+# 10 by 20 rectangle from x0,y0
+Lx = 10
+Ly= 20
+mask = (rows-y0>0) & (rows-y0<Ly)  & (cols-x0>0) & (cols-x0<Lx)
+plt.imshow(mask,cmap="bone",origin="lower")
+```
+

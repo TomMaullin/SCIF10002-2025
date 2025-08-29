@@ -1,0 +1,210 @@
+---
+title: Exercises - Working with NumPy
+jupyter: python3
+---
+
+
+
+### Exercise 1: Basic Indexing
+Create a 1D NumPy array of integers from 10 to 19. Access the element at index 3.
+
+```{python}
+#| tags: [sol]
+import numpy as np
+arr = np.arange(10, 20)
+arr[3]
+```
+
+### Exercise 2: Slicing
+Slice the array `arr` to get elements from index 2 to 6.
+
+```{python}
+#| tags: [sol]
+arr = np.arange(10, 20)
+arr[2:7]
+```
+
+### Exercise 3: Step Slicing
+Use slicing with a step to get every second element from index 1 to 9.
+
+```{python}
+#| tags: [sol]
+arr = np.arange(10, 20)
+arr[1:10:2]
+```
+
+### Exercise 4: Copy vs View
+Demonstrate that slicing creates a view, not a copy, by modifying a slice and showing the original array changes.
+
+```{python}
+#| tags: [sol]
+arr = np.arange(10, 20)
+slice_view = arr[2:5]
+slice_view[:] = 99
+arr
+```
+
+### Exercise 5: Copying Arrays
+Use `.copy()` to create a slice that doesn't affect the original array. In particular, select only the elements from index 2 to 5 and assign 99 to all of them. Show that the original array remains unchanged.
+
+```{python}
+#| tags: [sol]
+arr = np.arange(10, 20)
+slice_copy = arr[2:5].copy()
+slice_copy[:] = 99
+arr
+```
+
+### Exercise 6: Generating sequences and Boolean indexing
+
+Generate a NumPy sequence of 100 integers from 0 to 99. Use Boolean indexing to select only the even numbers from this array.
+
+```{python}
+#| tags: [sol]
+arr = np.arange(0, 100)
+even_numbers = arr[arr % 2 == 0]
+even_numbers
+```
+
+### Exercise 8: Random Array Generation
+
+Random numbers from arbitrary distributions are in fact generated through the transformation of uniformly distributed random numbers.
+
+The trick is the following:
+
+- calculate the cumulative distribution function (CDF) of the desired distribution
+- calculate the inverse of the CDF (also known as the quantile function), which maps probabilities (values between 0 and 1) to values of the random variable
+- sample a uniformly distributed random number between 0 and 1 and use the the inverse CDF to read off the value of the random variable.
+
+
+Let's take the example of the exponential distribution. This is defined by the following probability density function (PDF):
+
+$$
+f(x) = \lambda e^{-\lambda x}
+$$
+with mean $1/\lambda$ and standard deviation $1/\lambda$. 
+
+The CDF of the exponential distribution is given by:
+
+$$F(x) = 1 - e^{-\lambda x}
+$$
+
+So its inverse is:
+$$F^{-1}(p) = -\frac{1}{\lambda} \ln(1 - p)$$
+
+So in the following cell:
+
+- define a random number generator `rng` with a fixed seed 10
+- sample 1000 uniformly distributed random numbers between 0 and 1
+- use the inverse CDF to transform them into exponentially distributed random numbers with mean  30.0
+- calculate the mean and standard deviation of the resulting array.
+- compare this with the results obtained using `rng.exponential`.
+
+```{python}
+#| tags: [sol]
+# Define random number generator with fixed seed
+rng = np.random.default_rng(10)
+
+# Sample 1000 uniformly distributed random numbers between 0 and 1
+uniform_samples = rng.uniform(0, 1, 1000)
+
+# Exponential distribution parameters
+mean = 30.0
+lmbda = 1 / mean
+
+# Use inverse CDF to transform to exponential distribution
+exp_samples_inv = -np.log(1 - uniform_samples) / lmbda
+
+# Calculate mean and standard deviation
+mean_inv = exp_samples_inv.mean()
+std_inv = exp_samples_inv.std()
+
+# Compare with rng.exponential
+exp_samples_builtin = rng.exponential(mean, 1000)
+mean_builtin = exp_samples_builtin.mean()
+std_builtin = exp_samples_builtin.std()
+
+print(f"Direct method using the inverse CDF: mean={mean_inv:.2f}, std={std_inv:.2f}")
+print(f"rng.exponential: mean={mean_builtin:.2f}, std={std_builtin:.2f}")
+```
+
+## Exercise 9: Problem solving with NumPy
+
+Consider the following problem:
+
+> A panoramic wheel (a Ferris wheel) with a radius of 10 meters rotates anti-clockwise at a constant speed of 2 revolutions per minute. A passenger is seated in a car at the edge of the wheel. **Calculate the trajectory of the passenger with respect to the center of the wheel for the duration of 30 seconds, with a time resolution of 2 seconds, assuming they start at the rightmost point of the wheel.**
+
+The problem is a two-dimensional problem. The passenger has coordinates $x(t), y(t)$ and is performing uniform rotational motion, with angular velocity $\omega$ and radius $R$. 
+
+The angle formed at which the passenger is located is $\theta(t)$ and simply evolves as 
+
+$$\theta(t) = \omega t +\theta_0$$
+
+where $\theta_0$ is the initial angle ($\theta_0=0$ in our case).
+
+
+Hence, the trajectory is expressed by 
+
+$$
+\begin{align}
+x(t) & = R\cos\theta(t) = R \cos{\omega t}+x_0\\
+y(t) & = R\sin\theta(t)  = R \sin{\omega t}+y_0
+\end{align}
+$$
+
+
+So, we have all the theoretical knowledge that we need to solve the problem. How can we translate this into code?
+
+The first approach is via using vanilla Python
+
+```{python}
+import math
+R = 10.0 #in metres
+omega = 2.0*2*math.pi/60. # in radians per second
+x0 = R # in metres
+y0 = 0 # in metres
+dt = 2.0 # in seconds
+duration = 20.0 #in seconds
+num_iterations  = int(duration/dt)
+x, y = [], []
+t = 0
+for _ in range(num_iterations):
+    x.append(R*math.cos(omega*t)+x0)
+    y.append(R*math.sin(omega*t)+y0)
+    t += dt 
+
+# plotting, ignore the details for now sicne we will cover this in a later lecture
+import matplotlib.pyplot as plt
+plt.scatter(x,y)
+plt.axis("equal")
+plt.show()
+```
+
+The question now is: can you simpify this code by using NumPy? Your focus should be on **avoiding for loops** and using NumPy's array operations instead.
+
+```{python}
+#| tags: [sol]
+# solution
+import numpy as np
+R = 10.0
+# numpy also contains all the useful mathematical constants
+omega = 2.0*2*np.pi/60.
+theta0 = 0
+dt = 2.0
+duration = 20.0
+
+# using numpy arrays, the for loop is replaced by the creation of an array
+t = np.arange(0,duration,dt) 
+# from the array t, we can generate any other array, for example  by multiplying by a scalar
+theta = omega*t+theta0
+# now theta is another array, and we can apply a numpy function, such as np.cos
+x = R*np.cos(theta)
+y = R*np.sin(theta)
+
+# plotting, ignore the details for now
+import matplotlib.pyplot as plt
+plt.scatter(x,y)
+plt.axis("equal")
+```
+
+
