@@ -22,17 +22,17 @@ Priorities
 
 
 
-Possible assessment dates:
+## Dates for the assignments
 
-- P1:  
-  - Release: Wednesday 15th of October
-  - Closing: Wednesday 22 October at 12h00
-- P2: 
-  - Release: Wednesday, 19th of November
-  - Closing: Wednesday 3rd of December at 12h00
-- P3: 
-  - Release: Wednesday 4th of February
-  - Closing: Wednesday 18th of February at 12h00
-- P4: 
-  - Release: wednesdya 18 March at 12h00
-  - Closing: Wednesdy 22nd April at 12h00
+- Project 1:  
+  - Release: Wednesday, 8th of October 2025
+  - Closing: Wednesday 22 October 2025 at 12h00
+- Project 2: 
+  - Release: Wednesday, 19th of November 2025
+  - Closing: Wednesday 3rd of December 2025 at 12h00
+- Project 3: 
+  - Release: Wednesday, 4th of February 2026
+  - Closing: Wednesday 18th of February 2026 at 12h00
+- Project 4: 
+  - Release: Wednesday, 18 March 2026 at 12h00
+  - Closing: Wednesday 22nd April 2026 at 12h00

@@ -7,9 +7,9 @@
   - boolean selection and operations
   - maybe linear algebra
 - Tom thinks he can reshape the first three weeks with a simple but tricky project 1
-  - Week 1: Course structure and elementary data types
-  - Week 2: Logic and branching 
-  - Week 3: Iterables and loops
+  - Week 1: Course structure and elementary data types (Tom suggests 3 levels of self-assessment: Beginner, Intermediate and Advanced)
+  - Week 2: Logic and branching (Two levels, beginner and advanced, with try and except for the advanced)
+  - Week 3: Iterables and loops (list comprehension in advanced)
   - Week 4: Functions (merging a bit of week 13, no *functions* as first-class  objects)
   - Week 5: Consolidation [ how is it relevant to my degree?]
   - Week 6: Revision week
