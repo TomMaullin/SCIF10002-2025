@@ -1,10 +1,18 @@
 .vscode
 .DS_Store
+.virtual_documents/
 quarto/_*
-01/week_01_solutions_demonstrator_version.ipynb
+*/*_solutions_demonstrator*
+# 01/
+01/week_01_solutions.ipynb
 02/
+02/week_02_solutions.ipynb
 03/
+03/week_03_solutions.ipynb
 04/
+04/week_04_solutions.ipynb
+05/
+05/week_05_solutions.ipynb
 07/
 07_intro_numpy_slides.html
 08/
