@@ -14,7 +14,9 @@ quarto/_*
 # 05/
 # 05/week_05_solutions.ipynb
 # 06/
-06/exercises_numpy_solutions.ipynb
+# 06/exercises_numpy_solutions.ipynb
+# 07/
+07/exercises_lecture_working_with_numpy_solutions.ipynb
 08/
 09/
 10/
@@ -24,7 +26,7 @@ clear_solutions.py
 copy_slides_to_folders.py
 copy_to_quarto.sh*
 copy_to_quarto_with_links.sh*
-exercises_numpy.ipynb
+# exercises_numpy.ipynb
 quarto/
 todo.md
 .ipynb_checkpoints/
