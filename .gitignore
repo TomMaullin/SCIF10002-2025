@@ -20,8 +20,10 @@ quarto/_*
 # 08/
 # 08/*solutions*
 # 09/
-09/*solutions*
-10/
+# 09/*solutions*
+# 10/
+10/*solutions*
+10/*_demo.ipynb
 11/
 README.md
 clear_solutions.py
