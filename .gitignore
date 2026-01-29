@@ -25,7 +25,9 @@ quarto/_*
 # 10/*solutions*
 10/*_demo.ipynb
 # 11/
-11/*solutions*
+# 11/*solutions*
+# 12/
+12/*solutions*
 README.md
 clear_solutions.py
 copy_slides_to_folders.py
