@@ -27,7 +27,9 @@ quarto/_*
 # 11/
 # 11/*solutions*
 # 12/
-12/*solutions*
+# 12/*solutions*
+# 13
+13/*solutions*
 README.md
 clear_solutions.py
 copy_slides_to_folders.py
